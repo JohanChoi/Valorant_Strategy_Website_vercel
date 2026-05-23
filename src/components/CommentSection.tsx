@@ -250,7 +250,7 @@ export default function CommentSection({ postId, currentUserId }: CommentSection
   return (
     <div className="comment-section">
       <h3 style={{ fontSize: '1.3rem', marginBottom: '1rem' }}>
-        <span className="text-red">//</span> Discussion ({comments.length})
+        <span className="text-red">{'//'}</span> Discussion ({comments.length})
       </h3>
 
       {currentUserId ? (

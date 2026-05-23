@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface User {
   userId: string;
@@ -11,11 +11,12 @@ interface User {
 
 export default function Navbar() {
   const router = useRouter();
+  const pathname = usePathname();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch('/api/auth/me')
+  const fetchUser = useCallback(() => {
+    fetch('/api/auth/me', { cache: 'no-store' })
       .then((res) => res.json())
       .then((data) => {
         setUser(data.user);
@@ -23,6 +24,10 @@ export default function Navbar() {
       })
       .catch(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser, pathname]);
 
   async function handleLogout() {
     await fetch('/api/auth/logout', { method: 'POST' });
@@ -54,7 +59,7 @@ export default function Navbar() {
                     className="secondary"
                     style={{ padding: '8px 18px', fontSize: '0.95rem' }}
                   >
-                    Logout
+                    Sign Out
                   </button>
                 </>
               ) : (

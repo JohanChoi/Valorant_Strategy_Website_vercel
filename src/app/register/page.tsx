@@ -44,7 +44,7 @@ export default function RegisterPage() {
     <div className="flex justify-center items-center" style={{ minHeight: '60vh' }}>
       <div className="card glass-panel" style={{ width: '100%', maxWidth: '420px' }}>
         <h2 className="text-center mb-8" style={{ fontSize: '1.6rem' }}>
-          <span className="text-red">//</span> Join ValoStrat
+          <span className="text-red">{'//'}</span> Join ValoStrat
         </h2>
 
         {error && (

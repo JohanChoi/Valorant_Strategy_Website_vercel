@@ -30,7 +30,7 @@ export default async function MapPage({ params }: PageProps) {
       <div className="mb-8">
         <Link href="/" className="text-muted back-link">← Back to Maps</Link>
         <h1 style={{ fontSize: '2.5rem', marginTop: '0.5rem' }}>
-          <span className="text-red">//</span> {mapKey}
+          <span className="text-red">{'//'}</span> {mapKey}
         </h1>
         <p className="text-muted">Select a site to view strategies and uploads.</p>
       </div>

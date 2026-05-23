@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Valorant Strategy Board
 
-## Getting Started
+A Next.js app for sharing Valorant strategy posts with auth, comments, PostgreSQL storage through Prisma, and media uploads through Vercel Blob.
 
-First, run the development server:
+## Local Development
+
+1. Install dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Copy the example env file and fill in local values:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+copy .env.example .env
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Generate Prisma client and run the dev server:
 
-## Learn More
+```bash
+npm run build
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Open [http://localhost:3000](http://localhost:3000).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Required Environment Variables
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Set these in Vercel Project Settings > Environment Variables:
 
-## Deploy on Vercel
+- `DATABASE_URL`: PostgreSQL connection string from Neon.
+- `JWT_SECRET`: long random string used to sign login cookies.
+- `BLOB_READ_WRITE_TOKEN`: created by Vercel Blob when Blob storage is connected to the project.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Do not commit real `.env` files. They are intentionally ignored by git.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Production Database Setup With Neon
+
+1. Create a new Neon project.
+2. Copy the production PostgreSQL connection string. Use the pooled connection string if Neon recommends it for serverless apps.
+3. Add that value to Vercel as `DATABASE_URL`.
+4. Temporarily put the same value in your local `.env`.
+5. Apply migrations to the new database:
+
+```bash
+npm.cmd run db:deploy
+```
+
+On macOS/Linux, use:
+
+```bash
+npm run db:deploy
+```
+
+## Vercel Deployment Checklist
+
+1. Confirm Vercel deploys from GitHub `main`.
+2. Add `DATABASE_URL`, `JWT_SECRET`, and `BLOB_READ_WRITE_TOKEN` in Vercel.
+3. Connect or create Vercel Blob storage for the project.
+4. Run `npm.cmd run db:deploy` against the Neon production database.
+5. Redeploy the Vercel project.
+6. Test production:
+   - Register a new account.
+   - Log out and log back in.
+   - Upload one image.
+   - Open a map/site page and confirm the post appears.
+   - Add, edit, and delete a comment.
+
+If production functionality still fails, check Vercel Function Logs for:
+
+- `/api/auth/register`
+- `/api/auth/login`
+- `/api/posts/upload`
+- `/api/comments`
+
+## Scripts
+
+- `npm run dev`: start local development server.
+- `npm run build`: generate Prisma client and build Next.js.
+- `npm run start`: start the production Next.js server.
+- `npm run lint`: run ESLint.
+- `npm run db:deploy`: apply Prisma migrations to the database in `DATABASE_URL`.

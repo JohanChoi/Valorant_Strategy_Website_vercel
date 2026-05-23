@@ -43,7 +43,7 @@ export default function LoginPage() {
     <div className="flex justify-center items-center" style={{ minHeight: '60vh' }}>
       <div className="card glass-panel" style={{ width: '100%', maxWidth: '420px' }}>
         <h2 className="text-center mb-8" style={{ fontSize: '1.6rem' }}>
-          <span className="text-red">//</span> Agent Login
+          <span className="text-red">{'//'}</span> Agent Login
         </h2>
 
         {error && (
