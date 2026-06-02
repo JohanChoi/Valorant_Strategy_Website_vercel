@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { unlink } from 'fs/promises';
-import path from 'path';
 import { getSession } from '@/lib/auth';
 import { MAPS } from '@/lib/maps';
 import { prisma } from '@/lib/prisma';
-import { del } from '@vercel/blob';
+import { deleteLocalUpload } from '@/lib/media-storage';
 
 interface RouteContext {
   params: Promise<{ id: string }>;
@@ -101,10 +99,7 @@ export async function DELETE(_request: NextRequest, context: RouteContext) {
 
     for (const mediaUrl of mediaUrls) {
       if (mediaUrl.startsWith('/uploads/')) {
-        const filePath = path.join(process.cwd(), 'public', mediaUrl);
-        await unlink(filePath).catch(() => undefined);
-      } else if (mediaUrl.includes('blob.vercel-storage.com')) {
-        await del(mediaUrl).catch(() => undefined);
+        await deleteLocalUpload(mediaUrl);
       }
     }
 
