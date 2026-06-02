@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSession } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { MAPS } from '@/lib/maps';
-import { put } from '@vercel/blob';
-import path from 'path';
+import { makeStoredFileName, storeMediaFile } from '@/lib/media-storage';
 
 export async function POST(request: NextRequest) {
   try {
@@ -48,17 +47,11 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Only image and video files are allowed.' }, { status: 400 });
       }
 
-      const ext = path.extname(file.name) || (mediaType === 'image' ? '.png' : '.mp4');
-      const fileName = `${Date.now()}-${index}-${Math.random().toString(36).substring(2, 8)}${ext}`;
-      const pathname = `uploads/${mapKey.toLowerCase()}/${siteName.toUpperCase()}/${fileName}`;
-      
-      // Upload file directly to Vercel Blob
-      const blob = await put(pathname, file, {
-        access: 'public',
-      });
+      const fileName = makeStoredFileName(file.name, mediaType, index);
+      const storedFile = await storeMediaFile(file, [mapKey.toLowerCase(), siteName.toUpperCase(), fileName]);
 
       mediaItems.push({
-        url: blob.url,
+        url: storedFile.url,
         type: mediaType,
         order: index,
       });

@@ -1,6 +1,6 @@
 # Valorant Strategy Board
 
-A Next.js app for sharing Valorant strategy posts with auth, comments, PostgreSQL storage through Prisma, and media uploads through Vercel Blob.
+A Next.js app for sharing Valorant strategy posts with auth, comments, PostgreSQL storage through Prisma, and media uploads stored on the hosting server disk.
 
 ## Local Development
 
@@ -27,21 +27,48 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Required Environment Variables
 
-Set these in Vercel Project Settings > Environment Variables:
+Set these on the production server:
 
-- `DATABASE_URL`: PostgreSQL connection string from Neon.
+- `DATABASE_URL`: PostgreSQL connection string.
 - `JWT_SECRET`: long random string used to sign login cookies.
-- `BLOB_READ_WRITE_TOKEN`: created by Vercel Blob when Blob storage is connected to the project.
+- `UPLOAD_DIR`: persistent directory where uploaded images/videos are stored.
+- `PORT`: optional port for `next start`; defaults to `3000` if your process manager does not set it.
 
 Do not commit real `.env` files. They are intentionally ignored by git.
 
-## Production Database Setup With Neon
+## Bluehost VPS Deployment
 
-1. Create a new Neon project.
-2. Copy the production PostgreSQL connection string. Use the pooled connection string if Neon recommends it for serverless apps.
-3. Add that value to Vercel as `DATABASE_URL`.
-4. Temporarily put the same value in your local `.env`.
-5. Apply migrations to the new database:
+This app requires a Node.js runtime because it uses Next.js Route Handlers, cookies, Prisma, and server-side media uploads. Use a Bluehost VPS or another Node-capable Bluehost product, not a static-only shared hosting setup.
+
+Required production environment variables:
+
+```bash
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE"
+JWT_SECRET="replace-with-a-long-random-secret"
+UPLOAD_DIR="/var/www/valorant-strategy-board/uploads"
+PORT="3000"
+```
+
+`UPLOAD_DIR` must be a persistent directory writable by the Node.js process. If it is omitted in production, uploads default to `/var/www/valorant-strategy-board/uploads`. In development, uploads default to `public/uploads`.
+
+Deployment command sequence:
+
+```bash
+npm ci
+npm run db:deploy
+npm run build
+npm run start
+```
+
+Put a reverse proxy such as Nginx or Apache in front of the app and proxy traffic to the configured `PORT`.
+
+## Production Database Setup
+
+1. Create a PostgreSQL database.
+2. Copy the production PostgreSQL connection string.
+3. Add that value on the server as `DATABASE_URL`.
+4. Temporarily put the same value in your local `.env` only if you need to run migrations from your own machine.
+5. Apply migrations to the production database:
 
 ```bash
 npm.cmd run db:deploy
@@ -53,13 +80,13 @@ On macOS/Linux, use:
 npm run db:deploy
 ```
 
-## Vercel Deployment Checklist
+## Deployment Checklist
 
-1. Confirm Vercel deploys from GitHub `main`.
-2. Add `DATABASE_URL`, `JWT_SECRET`, and `BLOB_READ_WRITE_TOKEN` in Vercel.
-3. Connect or create Vercel Blob storage for the project.
-4. Run `npm.cmd run db:deploy` against the Neon production database.
-5. Redeploy the Vercel project.
+1. Confirm Bluehost deploys from GitHub `main`.
+2. Add `DATABASE_URL`, `JWT_SECRET`, `UPLOAD_DIR`, and `PORT` on the Bluehost server.
+3. Create the `UPLOAD_DIR` folder and make it writable by the Node.js process.
+4. Run `npm run db:deploy` against the production PostgreSQL database.
+5. Build and start the Next.js app.
 6. Test production:
    - Register a new account.
    - Log out and log back in.
@@ -67,7 +94,7 @@ npm run db:deploy
    - Open a map/site page and confirm the post appears.
    - Add, edit, and delete a comment.
 
-If production functionality still fails, check Vercel Function Logs for:
+If production functionality fails, check the Node.js app logs for:
 
 - `/api/auth/register`
 - `/api/auth/login`
