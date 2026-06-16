@@ -690,3 +690,98 @@ input:focus, textarea:focus, select:focus {
     flex-direction: column;
   }
 }
+
+/* Tactical dropdown menu and CCTV system styling */
+.relative {
+  position: relative;
+}
+
+.nav-dropdown-trigger {
+  font-family: var(--font-header);
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  color: var(--val-text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 8px 0;
+  transition: color 0.2s ease;
+  outline: none;
+}
+
+.nav-dropdown-trigger:hover {
+  color: var(--val-red);
+}
+
+.navbar-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--val-card);
+  border: 1px solid var(--val-border);
+  border-radius: 4px;
+  min-width: 210px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  padding: 6px 0;
+  z-index: 200;
+  margin-top: 12px;
+  backdrop-filter: blur(12px);
+  background-color: rgba(31, 35, 38, 0.96);
+}
+
+.navbar-dropdown::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent transparent var(--val-border) transparent;
+}
+
+.navbar-dropdown a {
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  font-family: var(--font-body);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  transition: all 0.2s ease;
+  border-left: 2px solid transparent;
+  text-transform: none;
+}
+
+.navbar-dropdown a:hover {
+  background-color: rgba(255, 70, 85, 0.1);
+  color: var(--val-red);
+  border-left-color: var(--val-red);
+  padding-left: 20px;
+}
+
+.feed-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 8px;
+}
+
+.feed-status-dot.live {
+  background-color: #22c55e;
+  box-shadow: 0 0 8px #22c55e;
+}
+
+.feed-status-dot.offline {
+  background-color: #ef4444;
+  box-shadow: 0 0 8px #ef4444;
+}
+
