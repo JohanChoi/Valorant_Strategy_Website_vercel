@@ -81,7 +81,7 @@ export default function UploadPage() {
     <div className="flex justify-center" style={{ paddingBottom: '3rem' }}>
       <div className="card glass-panel" style={{ width: '100%', maxWidth: '600px' }}>
         <h2 className="text-center mb-8" style={{ fontSize: '1.6rem' }}>
-          <span className="text-red">//</span> Upload Strategy
+          <span className="text-red">{'//'}</span> Upload Strategy
         </h2>
 
         {error && (

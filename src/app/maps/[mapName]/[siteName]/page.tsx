@@ -33,7 +33,7 @@ export default async function SitePage({ params }: PageProps) {
           Back to {mapKey}
         </Link>
         <h1 style={{ fontSize: '2.5rem', marginTop: '0.5rem' }}>
-          <span className="text-red">//</span> {mapKey} - Site {upperSite}
+          <span className="text-red">{'//'}</span> {mapKey} - Site {upperSite}
         </h1>
         <p className="text-muted">
           {posts.length} {posts.length === 1 ? 'strategy' : 'strategies'} shared

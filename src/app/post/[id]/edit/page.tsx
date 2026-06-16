@@ -37,7 +37,7 @@ export default async function EditPostPage({ params }: PageProps) {
           </Link>
         </div>
         <h2 className="text-center mb-8" style={{ fontSize: '1.6rem' }}>
-          <span className="text-red">//</span> Edit Strategy
+          <span className="text-red">{'//'}</span> Edit Strategy
         </h2>
         <EditPostForm post={post} />
       </div>
