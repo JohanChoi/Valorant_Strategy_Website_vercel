@@ -1,0 +1,7 @@
+{
+  "env": {
+    "LOG_LEVEL": "@LOG_LEVEL"
+  },
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next"
+}
